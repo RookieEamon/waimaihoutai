@@ -33,7 +33,7 @@
         <el-button
           type="success"
           class="el-icon-circle-plus"
-          @click="this.$router.push('/cart/address')"
+          @click="addAddress"
           >新增地址</el-button
         >
       </div>
@@ -74,9 +74,9 @@ export default {
   name: "CartList",
   data() {
     return {
-      cartList: [],//购物车列表
-      addressList: [],//地址列表
-      address: {},//已选择的地址
+      cartList: [], //购物车列表
+      addressList: [], //地址列表
+      address: {}, //已选择的地址
     };
   },
   methods: {
@@ -138,6 +138,10 @@ export default {
             message: `取消下单`,
           });
         });
+    },
+    //点击新增地址的回调
+    addAddress() {
+      this.$router.push("/cart/address");
     },
   },
   mounted() {
