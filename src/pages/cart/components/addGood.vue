@@ -18,7 +18,7 @@
           >
         </el-select>
       </div>
-        <!-- 根据商铺获得的商品分类信息 -->
+      <!-- 根据商铺获得的商品分类信息 -->
       <div>
         <span style="margin-right: 20px">选择食品分类:</span>
         <el-select v-model="goodKindId" placeholder="请选择食品分类">
@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </div>
-        <!-- 根据商品分类信息获得的商品信息 -->
+      <!-- 根据商品分类信息获得的商品信息 -->
       <div>
         <span style="margin-right: 20px">选择食品:</span>
         <el-select v-model="goodId" placeholder="请选择食品">
@@ -62,7 +62,13 @@
             <span>{{ goodDetail.description || "" }}</span>
             <div class="bottom clearfix">
               <time class="time">{{ goodDetail.tips || "" }}</time>
-              <el-button type="text" class="button" v-if="goodDetail._id">添加至购物车</el-button>
+              <el-button
+                type="text"
+                class="button"
+                v-if="goodDetail._id"
+                @click="addToCart"
+                >添加至购物车</el-button
+              >
             </div>
           </div>
         </el-card>
@@ -73,11 +79,9 @@
             <span>用户评价:</span>
           </div>
           <div v-for="item in appraiseList" :key="item._id" class="text item">
-            {{ item.name}}X{{item.count}}次
+            {{ item.name }}X{{ item.count }}次
           </div>
-          <div class="text item" v-if="goodDetail._id">
-            ......
-          </div>
+          <div class="text item" v-if="goodDetail._id">......</div>
         </el-card>
       </div>
     </div>
@@ -88,7 +92,7 @@ import {
   reqRestaurantsByLocation,
   reqFoodListByRestaurantId,
   reqFoodsByCategoryId,
-  reqAppraiseByRestaurantId
+  reqAppraiseByRestaurantId,
 } from "@/api";
 import { mapState } from "vuex";
 export default {
@@ -97,13 +101,18 @@ export default {
     return {
       restaurantList: [], //商铺列表
       restaurantId: "", //商铺id
+      restaurantName: "", //商铺名字
       resuaurantnum: 5, //商铺显示数量
+
       goodKindId: "", //商品分类id
-      goodKindList: [], //商品分类id
+      goodKindList: [], //商品分类列表
+      categoryName: "", //商品分类名
+
       goodId: "", //商品id
       goodsObj: {}, //商品对象,其中的foods属性为商品列表
       goodDetail: {}, //商品详情
-      appraiseList:[]//评价列表
+      appraiseList: [], //评价列表
+      cartList: [], //购物车列表
     };
   },
   computed: {
@@ -115,21 +124,27 @@ export default {
   watch: {
     //监视商铺id的变化
     restaurantId: function (val) {
+      this.restaurantName = this.restaurantList.find(
+        (item) => item.id === val
+      ).name;
       //   console.log(val);
       this.getFoodKindList(val);
     },
     //监视商品分类id的变化
     goodKindId: function (val) {
       //   console.log(val);
+      this.categoryName = this.goodKindList.find(
+        (item) => item.id === val
+      ).name;
       this.getFoods(val);
     },
     //监视食品id变化
     goodId: function (val) {
-      console.log(this.goodsObj.foods.find((item) => item.item_id === val));
+      // console.log(this.goodsObj.foods.find((item) => item.item_id === val));
       this.goodDetail = this.goodsObj.foods.find(
         (item) => item.item_id === val
       );
-      this.getAppraise()
+      this.getAppraise();
     },
   },
   methods: {
@@ -161,16 +176,28 @@ export default {
       // console.log(result);
     },
     //获取评价
-    async getAppraise(){
-      let result = await reqAppraiseByRestaurantId(this.restaurantId)
-      console.log(result);
-      this.appraiseList=result
-    }
+    async getAppraise() {
+      let result = await reqAppraiseByRestaurantId(this.restaurantId);
+      // console.log(result);
+      this.appraiseList = result;
+    },
+    //添加至购物车
+    addToCart() {
+      this.goodDetail.restaurantName = this.restaurantName;
+      this.goodDetail.categoryName = this.categoryName;
+      this.cartList.push(this.goodDetail);
+      localStorage.setItem("cartList", JSON.stringify(this.cartList));
+      this.$router.push('/cart/cartList')
+      // console.log(this.goodDetail);     
+    },
   },
   mounted() {
     //一进来先获取商铺列表
     this.getRestaurants();
     // console.log(this.goodDetail._id);
+    if (localStorage.getItem("cartList")) {
+      this.cartList = JSON.parse(localStorage.getItem("cartList"));
+    }
   },
 };
 </script>

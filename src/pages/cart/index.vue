@@ -14,7 +14,7 @@
      width: 1200px;
      background-color: rgba(204, 204, 204,.5);
      position: absolute;
-     top: 107px;
+     top: 100px;
      left: 270px;
  }
 </style>
