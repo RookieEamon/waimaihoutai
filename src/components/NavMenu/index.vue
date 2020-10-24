@@ -34,9 +34,9 @@
                 <span>食品管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="2-1">搜索食品</el-menu-item>
-                <el-menu-item index="2-2">增加食品类型</el-menu-item>
-                <el-menu-item index="2-3">修改食品信息</el-menu-item>
+                <el-menu-item index="/food/searchfood">搜索食品</el-menu-item>
+                <el-menu-item index="/food/addfoodtype">增加食品类型</el-menu-item>
+                <el-menu-item index="/food/updatefoodinfo">修改食品信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
