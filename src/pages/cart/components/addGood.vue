@@ -124,6 +124,7 @@ export default {
   watch: {
     //监视商铺id的变化
     restaurantId: function (val) {
+      if (!val) return;
       this.restaurantName = this.restaurantList.find(
         (item) => item.id === val
       ).name;
@@ -132,6 +133,7 @@ export default {
     },
     //监视商品分类id的变化
     goodKindId: function (val) {
+      if (!val) return;
       //   console.log(val);
       this.categoryName = this.goodKindList.find(
         (item) => item.id === val
@@ -140,11 +142,29 @@ export default {
     },
     //监视食品id变化
     goodId: function (val) {
+      if (!val) return;
       // console.log(this.goodsObj.foods.find((item) => item.item_id === val));
       this.goodDetail = this.goodsObj.foods.find(
         (item) => item.item_id === val
       );
       this.getAppraise();
+    },
+    //监视城市信息变化
+    cityInfo: function () {
+      // location.reload()
+      // this.$router.push('/cart/addGood')
+      //重新获取数据
+      this.restaurantId = ""; //商铺id
+      this.restaurantName = ""; //商铺名字
+      this.resuaurantnum = 5; //商铺显示数量
+      this.goodKindId = ""; //商品分类id
+      this.goodKindList = []; //商品分类列表
+      this.categoryName = ""; //商品分类名
+      this.goodId = ""; //商品id
+      this.goodsObj = {}; //商品对象,其中的foods属性为商品列表
+      this.goodDetail = {}; //商品详情
+      this.appraiseList = []; //评价列表
+      this.getRestaurants();
     },
   },
   methods: {
@@ -155,7 +175,6 @@ export default {
         this.cityInfo.latitude,
         this.resuaurantnum
       );
-      // console.log(result);
       this.restaurantList = result;
     },
     //点击加载更多商铺
@@ -187,8 +206,8 @@ export default {
       this.goodDetail.categoryName = this.categoryName;
       this.cartList.push(this.goodDetail);
       localStorage.setItem("cartList", JSON.stringify(this.cartList));
-      this.$router.push('/cart/cartList')
-      // console.log(this.goodDetail);     
+      this.$router.push("/cart/cartList");
+      // console.log(this.goodDetail);
     },
   },
   mounted() {

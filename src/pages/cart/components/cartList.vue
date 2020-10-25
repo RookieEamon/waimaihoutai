@@ -40,7 +40,7 @@
       <el-table :data="addressList" border style="width: 100%" height="390">
         <el-table-column fixed prop="title" label="地址名" width="150">
         </el-table-column>
-        <el-table-column fixed prop="city" label="城市" width="150">
+        <el-table-column prop="city" label="城市" width="150">
         </el-table-column>
         <el-table-column prop="name" label="收货人" width="150">
         </el-table-column>

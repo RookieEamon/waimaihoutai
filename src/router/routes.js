@@ -11,18 +11,22 @@ export default [{
     {
         path: "/cart",
         component: Cart,
+        meta:{title:"购物车"},
         children: [
             {
                 path: '/cart/cartlist',
-                component:CartList
+                component:CartList,
+                meta:{title:"购物车列表",categoryTitle:"购物车"}
             },
             {
                 path: '/cart/addgood',
-                component:AddGood
+                component:AddGood,
+                meta:{title:"添加商品",categoryTitle:"购物车"}
             },
             {
                 path: '/cart/address',
-                component:Address
+                component:Address,
+                meta:{title:"地址信息",categoryTitle:"购物车"}
             },
             {
                 path: '/cart',

@@ -9,3 +9,6 @@ export const reqFoodsByCategoryId=(categoryId)=>ajax.get(`/shopping/v2/menu/${ca
 //获取评价分类
 // https://elm.cangdu.org/ugc/v2/restaurants/:restaurant_id/ratings/tags
 export const reqAppraiseByRestaurantId=(restaurantId)=>ajax.get(`/ugc/v2/restaurants/${restaurantId}/ratings/tags`)
+
+//获取城市列表
+export const reqCityList = ()=>ajax.get("https://elm.cangdu.org/v1/cities?type=hot")

@@ -7,8 +7,14 @@
     <div class="nav">
       <el-row class="tac">
         <el-col :span="4">
+          <!-- 
+            default-openeds默认展开的
+            router路由匹配
+            default-active = "path"根据path的值匹配高亮
+            path的值可以写在计算属性中
+           -->
           <el-menu
-            default-active="1"
+            :default-openeds="['1', '2', '3']"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
@@ -16,6 +22,7 @@
             text-color="#fff"
             active-text-color="#ffd04b"
             router
+            :default-active="path"
           >
             <el-submenu index="1">
               <template slot="title">
@@ -56,17 +63,42 @@
     </div>
     <div class="breadcrumb">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+        <el-breadcrumb-item>首页</el-breadcrumb-item>
+        <el-breadcrumb-item>{{
+          this.$route.meta.categoryTitle
+        }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ this.$route.meta.title }}</el-breadcrumb-item>
       </el-breadcrumb>
+    </div>
+    <div class="city">
+      <el-dropdown @command="changeCity">
+        <span class="el-dropdown-link">
+          <i class="el-icon-location"></i>{{cityInfo.name}} 切换城市<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :command='item' v-for="item in cityList" :key="item.id">{{item.name}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
 <script>
+import {reqCityList} from '@/api'
 export default {
   name: "NavMenu",
+  data() {
+    return {
+      cityList:[]
+    };
+  },
+  computed: {
+    path() {
+      return this.$route.path;
+    },
+    cityInfo(){
+      return this.$store.state.home.cityInfo
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -74,7 +106,17 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    async getCityList(){
+      let result = await reqCityList()
+      this.cityList = result
+    },
+    changeCity(city){
+      this.$store.commit("changeCityMutatin",city)
+    }
   },
+  mounted(){
+    this.getCityList()
+  }
 };
 </script>
 <style lang='less' rel='stylesheet/less' scoped>
@@ -87,6 +129,11 @@ export default {
     position: absolute;
     top: 70px;
     left: 300px;
+  }
+  .city{
+    position: absolute;
+    right: 200px;
+    top: 50px;
   }
 }
 </style>

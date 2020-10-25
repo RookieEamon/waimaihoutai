@@ -10,11 +10,12 @@ const state = {
         abbr: "SH",
         name: "上海",
         id: 1
-
     }
 }
 const mutations = {
-
+    changeCityMutatin(state, cityInfo) {
+        state.cityInfo = cityInfo
+    }
 }
 const actions = {
 
