@@ -12,3 +12,6 @@ export const reqAppraiseByRestaurantId=(restaurantId)=>ajax.get(`/ugc/v2/restaur
 
 //获取城市列表
 export const reqCityList = ()=>ajax.get("https://elm.cangdu.org/v1/cities?type=hot")
+
+//根据关键词获取商铺分类列表
+export const reqShopListByKeyword = ({geohash,shopKeyword})=>ajax.get(`https://elm.cangdu.org/v4/restaurants?geohash=${geohash}&keyword=${shopKeyword}`)

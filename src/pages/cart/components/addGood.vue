@@ -221,6 +221,11 @@ export default {
 };
 </script>
 <style lang='less' rel='stylesheet/less' scoped>
+  .loadMoreRestaurant {
+    font-size: 15px;
+    color: pink;
+    margin-left: 15px;
+  }
 .select {
   display: flex;
   justify-content: space-around;
