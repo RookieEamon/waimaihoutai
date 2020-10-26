@@ -16,7 +16,7 @@ import Food from '@/pages/food'
 import AddfoodType from '@/pages/food/components/AddfoodType'
 import SearchFood from '@/pages/food/components/SearchFood'
 import UpdatefoodInfo from '@/pages/food/components/UpdatefoodInfo'
-
+//66
 export default [{
         path: "/login",
         component: Login
