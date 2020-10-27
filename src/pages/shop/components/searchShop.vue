@@ -4,6 +4,7 @@
     <div class="title">
       搜索商家
       <el-input
+        @keyup.enter.native="search"
         placeholder="查找商户"
         v-model="shopKeyword"
         class="input-with-select"
@@ -17,32 +18,175 @@
         ></el-button>
       </el-input>
     </div>
-    <!-- 顶部的搜索商铺部分 -->
-    <!-- <div class="searchContainer">
-       <el-button slot="append" >点击查看全部商家</el-button>
-      <el-input v-model= 'shopKeyword' placeholder="请输入关键词" clearable>
-        <el-button slot="append" icon="el-icon-search"></el-button>
-      </el-input> -->
-
-    <!-- </div> -->
 
     <!-- 搜索后 展示商铺信息的部分 -->
-    <div class="show">
-      <div class="shopItem" v-for="(item,index) in shopList" :key="item.id">
+    <div class="show" style="height: 560px">
+      <div class="shopItem" v-for="(item, index) in shopList" :key="item.id">
         <img src="../imgs/01.jpg" alt="" />
-        <!-- 信息展示区 -->
+
         <div class="content">
           <div>
-            <span class="name contentItem">{{item.name}}</span>
-            <p class="area">{{item.address}}</p>
-            <div class="opentime">
-              <span>营业时间</span> <span>{{item.opening_hours[0]}}</span>
+            <span class="name contentItem">{{ item.name }}</span>
+            <p class="area">{{ item.address }}</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>{{ item.opening_hours[0] }}</span>
             </div>
-            <div class="price"><span>{{item.piecewise_agent_fee.tips}}</span></div>
-            <div class="call"><span>联系商家:</span> <span>{{item.phone}}</span></div>
+            <div class="price">
+              <span>{{ item.piecewise_agent_fee.tips }}</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>{{ item.phone }}</span>
+            </div>
           </div>
           <div>
-            <div class="location"><i></i><span>174801km</span></div>
+            <div class="location">
+              <i></i><span>{{ item.distance }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">海底捞</span>
+            <p class="area">北京市昌平区幸福路29号</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥15</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>13112123434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>13414.公里</span>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">鲜芋仙</span>
+            <p class="area">北京市三里屯SOHO</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥15</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>145341423434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>4.3公里</span>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">鸡公煲</span>
+            <p class="area">三元市幸福路29号</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥5</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>131121888434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>14.公里</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">海底捞</span>
+            <p class="area">北京市昌平区幸福路29号</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥15</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>13112123434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>13414.公里</span>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">鲜芋仙</span>
+            <p class="area">北京市三里屯SOHO</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥15</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>145341423434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>4.3公里</span>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="shopItem" >
+        <img src="../imgs/01.jpg" alt="" />
+
+        <div class="content">
+          <div>
+            <span class="name contentItem">鸡公煲</span>
+            <p class="area">三元市幸福路29号</p>
+            <div class="opentime" style="color: #ed3403">
+              <span>营业时间</span> <span>8:00-22:00</span>
+            </div>
+            <div class="price">
+              <span>￥5</span>
+            </div>
+            <div class="call">
+              <span>联系商家:</span> <span>131121888434</span>
+            </div>
+          </div>
+          <div>
+            <div class="location">
+              <i></i><span>14.公里</span>
+            </div>
           </div>
         </div>
       </div>
@@ -51,7 +195,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
   name: "SearchShop",
   data() {
@@ -66,19 +210,19 @@ export default {
   },
   computed: {
     ...mapState({
-      shopList:state=>state.searchShop.shopList
-    })
+      shopList: (state) => state.searchShop.shopList,
+    }),
   },
   methods: {
-    search(){
-      const geohash='31.22967,121.4762'
+    search() {
+      const geohash = "31.22967,121.4762";
       const shopObj = {
-        shopKeyword:this.shopKeyword,
-        geohash
-      }
-      console.log(shopObj)
-      this.$store.dispatch('shopListByKeyword',shopObj)
-    }
+        shopKeyword: this.shopKeyword,
+        geohash,
+      };
+      console.log(shopObj);
+      this.$store.dispatch("shopListByKeyword", shopObj);
+    },
   },
 };
 </script>
@@ -88,6 +232,7 @@ export default {
 .searchShopContianer {
   display: flex;
   flex-direction: column;
+  padding-right: 30px;
 
   padding-top: 30px;
   padding-left: 30px;
@@ -112,7 +257,6 @@ export default {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-
     .searchItem {
       margin-right: 20px;
     }
@@ -123,9 +267,10 @@ export default {
 
   /* 商铺展示部分 */
   .show {
-    background-color: antiquewhite;
+    background-color: #ddd;
     display: flex;
     flex-direction: column;
+    overflow: auto;
     //每条信息的外部容器
     .shopItem {
       display: flex;
