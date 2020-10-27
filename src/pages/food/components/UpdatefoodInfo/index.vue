@@ -35,12 +35,6 @@ export default {
   name: 'UpdatefoodInfo',
    data() {
       return {
-        updateList:[],
-        // ruleForm:{
-        //   foodObj:{},
-        //   restaurantName:'',
-        //   categoryName:''
-        // }
          foodObj:{},
          restaurantName:'',
          categoryName:''
@@ -64,8 +58,7 @@ export default {
     methods: {
       // 确定修改
       update(){
-        // this.updateList.push(this.updateList)
-        localStorage.setItem("updateList",JSON.stringify(this.updateList))
+        localStorage.setItem("updateList",this.restaurantName + this.categoryName + this.foodObj.name + this.foodObj.description)
         this.$message('修改成功')
       }
     },
