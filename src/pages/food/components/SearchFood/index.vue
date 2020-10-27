@@ -4,7 +4,7 @@
     <el-card class="box-card">
       <div class="text item">
         <!-- 商铺选择 -->
-        <label>商铺</label>
+        <label>商家名称</label>
         <el-select 
           v-model="restaurantId" 
           placeholder="请选择"
@@ -20,62 +20,45 @@
         </el-select>
 
         <!-- 根据商铺获得的商品分类列表 -->
-        <label>商品分类列表</label>
+        <label>食品分类列表</label>
         <el-select
-          v-model="goodKingId"
+          v-model="goodCategoryId"
           style="margin-left: 20px;margin-right:20px"
           placeholder="请选择">
           <el-option
-            v-for="item in goodKingList"
+            v-for="item in goodCategoryList"
             :key="item.id"
             :label="item.name"
             :value="item.id">
           </el-option>
-        </el-select>
-
-        <!-- 根据商品分类列表获得商品列表 -->
-        <label>商品列表</label>
-        <el-select
-          v-model="goodId"
-          style="margin-left: 20px;margin-right:20px"
-          placeholder="请选择">
-          <el-option
-            v-for="item in goodsObj.foods"
-            :key="item.item_id"
-            :label="item.name"
-            :value="item.item_id">
-          </el-option>
-        </el-select>
-
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        </el-select>     
+        <!-- <el-button type="primary" icon="el-icon-search">搜索</el-button> -->
       </div>
     </el-card>
 
-
     <!-- 第二个卡片 -->
+    <!-- 根据商品分类列表获得商品列表 -->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-button style="padding: 10px" class="el-icon-plus" type="primary">添加按钮</el-button>
+        <el-button style="padding: 10px" class="el-icon-plus" type="primary" @click="addFood">添加按钮</el-button>
       </div>
       <div class="text item">
         <el-table
-          :data="tableData"
+          :data="goodsObj.foods"
           border
           style="width: 100%"
-          :row-class-name="tableRowClassName">
-          <el-table-column
-            prop="date"
-            label="日期"
-            width="180">
-          </el-table-column>
+        >
           <el-table-column
             prop="name"
-            label="姓名"
-            width="180">
+            label="食品名称">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="地址">
+            prop="description"
+            label="食品描述">
+          </el-table-column>
+          <el-table-column
+            prop="tips"
+            label="销量和评价">
           </el-table-column>
 
           <el-table-column label="操作">
@@ -83,17 +66,16 @@
               <el-button
                 size="mini"
                 type="primary"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
+                @click="handleEdit(scope)">修改</el-button>
+              <!-- <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
       </div>
   </el-card>
-
   </div>
 </template>
 
@@ -116,31 +98,12 @@ export default {
         restaurantList:[],//商铺列表
         resuaurantnum:5,//商铺显示数量
 
-        goodKingId:'',//商品分类id
-        goodKingList:[],//商品分类列表
+        goodCategoryId:'',//商品分类id
+        goodCategoryList:[],//商品分类列表
 
         goodId:'',//商品id
         goodsObj:{},//商品对象，其中的foods属性为商品列表
         goodDetail:{},//商品详情
-
-
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }]
       }
     },
 
@@ -154,24 +117,25 @@ export default {
     watch:{
       //监视商铺id的变化
       restaurantId:function(val) {
+        this.restaurantName = this.restaurantList.find((item) => item.id ===val).name;
         this.getFoodCategoryList(val);  
       },
 
-      //监视商品分类id的变化
-      goodKingId:function (val) {
+      //监视食品分类id的变化
+      goodCategoryId:function (val) {
+        this.categoryName = this.goodCategoryList.find((item) => item.id === val).name;
         this.getFoods(val)        
       },
 
       // 监视食品id变化
       goodId:function (val) {
-        console.log(this.goodsObj.foods.find((item) => item.item_id === val));
+        // console.log(this.goodsObj.foods.find((item) => item.item_id === val));
         this.goodDetail = this.goodsObj.foods.find((item) => item.item_id === val);
-        // this.getAppraise()
       },
     },
 
     methods: {
-      // 根据城市信息获取商品列表
+      // 根据城市信息获取商家列表
       async getRestaurants(){
         let result = await reqRestaurantsByLocation(
           this.cityInfo.longitude,
@@ -195,36 +159,32 @@ export default {
 
       // 根据商品分类id获取食品列表
       async getFoods(){
-        let result = await reqFoodsByCategoryId(this.goodKingId);
+        let result = await reqFoodsByCategoryId(this.goodCategoryId);
         this.goodsObj = result;
       },
 
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
+      // 添加食品
+      addFood(){
+        this.$router.push('/food/addfoodtype')
       },
-       tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
+
+      // 修改当前行食品信息
+      handleEdit(scope) {
+        // console.log(scope)
+        // query传参
+        this.$router.push({
+          path:'/food/updatefoodinfo',
+          query:{foodObj:scope.row,restaurantName:this.restaurantName,categoryName:this.categoryName}
+        })
       },
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
+
+      // handleDelete(index, row) {
+      //   console.log(index, row);
+      // }
     },
 
     mounted() {
-      // 页面已加载先获取商铺列表
+      // 页面已加载先获取商家列表
       this.getRestaurants();
     },
 }
@@ -249,7 +209,6 @@ export default {
     background: #ccc;
   }
 
-
   .clearfix:before,
   .clearfix:after {
     display: table;
@@ -258,13 +217,4 @@ export default {
   .clearfix:after {
     clear: both
   }
-
-  .el-table .warning-row {
-    background: oldlace;
-  }
-
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
-
 </style>
