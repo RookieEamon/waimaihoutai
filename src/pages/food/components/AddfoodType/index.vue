@@ -2,152 +2,93 @@
   <div>
     <!-- 第一个卡片 -->
     <el-card class="box-card">
-    <div class="text item">
-      <label>一级分类</label>
-      <el-select 
-        v-model="value1" 
-        multiple 
-        placeholder="请选择"
-        style="margin-left: 20px;margin-right:20px"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-
-      <label>二级分类</label>
-      <el-select
-        v-model="value2"
-        multiple
-        collapse-tags
-        style="margin-left: 20px;"
-        placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+    <div class="text item">   
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="商家名称" prop="shopname">
+          <el-input v-model="ruleForm.shopname"></el-input>
+        </el-form-item>
+        <el-form-item label="食品分类" prop="category">
+          <el-input v-model="ruleForm.category"></el-input>
+        </el-form-item>
+        <el-form-item label="食品名称" prop="foodname">
+          <el-input v-model="ruleForm.foodname"></el-input>
+        </el-form-item>
+        <el-form-item label="食品描述" prop="desc">
+          <el-input v-model="ruleForm.desc"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     </el-card>
-
-
-    <!-- 第二个卡片 -->
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <el-button style="padding: 10px" class="el-icon-plus" type="primary">添加按钮</el-button>
-      </div>
-      <div class="text item">
-        <el-table
-          :data="tableData"
-          border
-          style="width: 100%"
-          :row-class-name="tableRowClassName">
-          <el-table-column
-            prop="date"
-            label="日期"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="地址">
-          </el-table-column>
-
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-  </el-card>
-
   </div>
 </template>
 
 <script>
+import {nanoid} from 'nanoid'
 export default {
   name: 'AddFood',
    data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value1: [],
-        value2: [],
-
-         tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }]
+        ruleForm: {
+          shopname: '',//商家名称
+          category: '',//食品分类
+          foodname: '',//食品名称
+          desc: ''//食品描述
+        },
+        rules: {
+          shopname: [
+            { required: true, message: '请输入商家名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          category: [
+            { required: true, message: '请输入食品分类', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          foodname: [
+            { required: true, message: '请输入食品名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          desc: [
+            { required: true, message: '请输入食品描述', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ]
+        },
+        foodList:[]
+      };
+    },
+    mounted() {
+      if(localStorage.getItem('foodList')){
+        this.foodList = JSON.parse(localStorage.getItem('foodList'))
       }
     },
     methods: {
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
+      // 提交表单
+      submitForm(formName) {
+        //是否通过所有的表单验证规则
+        this.$refs[formName].validate((valid) => {
+          // 通过表单验证
+          if (valid) {
+            // console.log(foodList);
+            this.ruleForm.id = nanoid()
+            this.foodList.push(this.ruleForm)
+            localStorage.setItem("foodList",JSON.stringify(this.foodList))
+            // alert('添加成功');
+            this.$router.push('/food/searchfood')
+            this.$message('添加成功')
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
-       tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      },
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
+      // 重置表单
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
-    },
+    }
 }
 </script>
 
@@ -157,23 +98,6 @@ export default {
   }
   .item {
     padding: 18px 0;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-
-  .el-table .warning-row {
-    background: oldlace;
-  }
-
-  .el-table .success-row {
-    background: #f0f9eb;
   }
 
 </style>
