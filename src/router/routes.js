@@ -19,7 +19,8 @@ import UpdatefoodInfo from '@/pages/food/components/UpdatefoodInfo'
 //66
 export default [{
         path: "/login",
-        component: Login
+        component: Login,
+        meta:{isLogin:true}
     },
     {
         path: "/cart",
@@ -89,7 +90,7 @@ export default [{
                {
                     path:"/food/addfoodtype",
                     component:AddfoodType,
-                    meta:{title:"增加食品类型",categoryTitle:"食品管理"}
+                    meta:{title:"增加食品",categoryTitle:"食品管理"}
                 },
                 {
                     path:"/food/updatefoodinfo",
@@ -101,6 +102,10 @@ export default [{
                     redirect:'/food/searchfood'
                 }
            ]
+        },
+        {
+            path:"/",
+            redirect:"/login"
         }
         
 ]

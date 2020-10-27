@@ -21,7 +21,7 @@
 
     <!-- 搜索后 展示商铺信息的部分 -->
     <div class="show" style="height: 560px">
-      <div class="shopItem" v-for="(item, index) in shopList" :key="item.id">
+      <div class="shopItem" v-for="(item) in shopList" :key="item.id">
         <img src="../imgs/01.jpg" alt="" />
 
         <div class="content">
@@ -215,6 +215,10 @@ export default {
   },
   methods: {
     search() {
+      if(!this.shopKeyword.trim()){
+        this.$message('请输入关键词再搜索')
+        return
+      }
       const geohash = "31.22967,121.4762";
       const shopObj = {
         shopKeyword: this.shopKeyword,
@@ -222,6 +226,7 @@ export default {
       };
       console.log(shopObj);
       this.$store.dispatch("shopListByKeyword", shopObj);
+      this.shopKeyword=''
     },
   },
 };

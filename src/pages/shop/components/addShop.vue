@@ -208,6 +208,7 @@ export default {
     },
     //计数器中点击改变数字的方法
     handleNumberChange(value) {
+      
       console.log(value);
     },
   },

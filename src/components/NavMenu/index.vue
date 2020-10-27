@@ -42,7 +42,7 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item index="/food/searchfood">搜索食品</el-menu-item>
-                <el-menu-item index="/food/addfoodtype">增加食品类型</el-menu-item>
+                <el-menu-item index="/food/addfoodtype">增加食品</el-menu-item>
                 <el-menu-item index="/food/updatefoodinfo">修改食品信息</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -80,15 +80,23 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <div class="userinfo" @click="outLogin">
+      <span class="user">
+      欢迎:{{userName}}
+    </span><br/>
+    <span class="out">退出登录</span>
+    </div>
   </div>
 </template>
 <script>
 import {reqCityList} from '@/api'
 export default {
   name: "NavMenu",
+  
   data() {
     return {
-      cityList:[]
+      cityList:[],
+      userName:''
     };
   },
   computed: {
@@ -112,10 +120,15 @@ export default {
     },
     changeCity(city){
       this.$store.commit("changeCityMutatin",city)
+    },
+    outLogin(){
+      localStorage.removeItem('USERTOKEN')
+      this.$router.push('/login')
     }
   },
   mounted(){
     this.getCityList()
+    this.userName=localStorage.getItem('USERTOKEN')
   }
 };
 </script>
@@ -134,6 +147,12 @@ export default {
     position: absolute;
     right: 200px;
     top: 50px;
+  }
+  .userinfo{
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    cursor: pointer;
   }
 }
 </style>

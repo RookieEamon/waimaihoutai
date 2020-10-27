@@ -10,11 +10,12 @@
 </script>
 <style lang='less' rel='stylesheet/less' scoped>
  .container{
-     height: 660px;
+   padding: 20px;
+    //  height: 960px;
      width: 1200px;
      background-color: rgba(204, 204, 204,.5);
      position: absolute;
-     top: 100px;
+     top: 107px;
      left: 270px;
  }
 </style>
